@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.14.0",
+    "libraryName": "intranet",
+    "libraryId": "30c58e22-3beb-4aa8-a350-76a14959fdce",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "intranet",
+    "solutionShortDescription": "intranet description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
