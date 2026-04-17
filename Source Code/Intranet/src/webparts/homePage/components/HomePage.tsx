@@ -2,25 +2,62 @@ import * as React from "react";
 import styles from "./HomePage.module.scss";
 import { IHomePageProps } from "./IHomePageProps";
 import { escape } from "@microsoft/sp-lodash-subset";
-
+import { sp } from "@pnp/sp/presets/all";
 require("../assets/style.css");
+export interface IHomePageState {
+  quickLinks: any;
+}
+export default class LandingPage extends React.Component<IHomePageProps, IHomePageState> {
+  constructor(props: IHomePageProps, state: IHomePageState) {
+    super(props);
+    this.state = {
+      quickLinks: [],
+    };
+  }
+  private getGreeting(): string {
+    const hour = new Date().getHours();
 
-export default class LandingPage extends React.Component<IHomePageProps, {}> {
+    if (hour < 12) {
+      return "Good Morning";
+    } else if (hour < 17) {
+      return "Good Afternoon";
+    } else {
+      return "Good Evening";
+    }
+  }
   public render(): React.ReactElement<IHomePageProps> {
     const { description, isDarkTheme, environmentMessage, hasTeamsContext, userDisplayName } = this.props;
+    const ImageLink = this.props.HomeBannerFilePicker == undefined ? require("../assets/bg.png") : this.props.HomeBannerFilePicker.fileAbsoluteUrl;
 
     return (
       <section style={{ backgroundColor: "#f9f9f9" }}>
-        <div className="hero">
+        <div
+          className="hero"
+          style={{
+            backgroundImage: `url(${ImageLink})`,
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+          }}
+        >
           <div className="overlay"></div>
           <div className="hero-content">
             <div className="logo">
               {/* <div className="circle">H</div> */}
-              <h1>Westways Insurance Hub</h1>
+              <h1>{this.props.Title}</h1>
             </div>
-            <p>Good morning, Sabina! 👋</p>
+            <p>
+              {this.getGreeting()}, {this.props.userDisplayName.split(" ")[0]}! 👋
+            </p>
 
-            <input type="text" placeholder="Search pages, templates, people..." />
+            <input
+              type="text"
+              id="chatSearchbtn"
+              placeholder="Search pages, templates, people..."
+              onChange={(e) => {
+                this.triggerEventChatSearch();
+              }}
+            />
           </div>
         </div>
         <div className="container">
@@ -264,4 +301,16 @@ export default class LandingPage extends React.Component<IHomePageProps, {}> {
       </section>
     );
   }
+
+  // function to trigger event on enter key for Chat Search
+  public triggerEventChatSearch = () => {
+    let mythis = this;
+    var input = document.getElementById("chatSearchbtn");
+    input.addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        window.open(mythis.props.siteUrl + "/_layouts/15/search.aspx/siteall?q=" + event.currentTarget["value"]);
+      }
+    });
+  };
 }

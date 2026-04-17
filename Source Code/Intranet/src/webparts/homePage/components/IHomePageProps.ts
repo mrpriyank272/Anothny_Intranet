@@ -4,4 +4,7 @@ export interface IHomePageProps {
   environmentMessage: string;
   hasTeamsContext: boolean;
   userDisplayName: string;
+  Title: string;
+  HomeBannerFilePicker: any;
+  siteUrl: any;
 }

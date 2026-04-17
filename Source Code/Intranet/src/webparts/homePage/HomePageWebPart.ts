@@ -11,9 +11,17 @@ import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import * as strings from 'HomePageWebPartStrings';
 import HomePage from './components/HomePage';
 import { IHomePageProps } from './components/IHomePageProps';
+import {
+  PropertyFieldFilePicker,
+  IPropertyFieldFilePickerProps,
+  IFilePickerResult,
+} from "@pnp/spfx-property-controls/lib/PropertyFieldFilePicker";
+import { sp } from "@pnp/sp/presets/all";
 
 export interface IHomePageWebPartProps {
   description: string;
+  Title: string;
+  HomeBannerFilePicker: IFilePickerResult;
 }
 
 export default class HomePageWebPart extends BaseClientSideWebPart<IHomePageWebPartProps> {
@@ -23,6 +31,9 @@ export default class HomePageWebPart extends BaseClientSideWebPart<IHomePageWebP
 
   protected onInit(): Promise<void> {
     this._environmentMessage = this._getEnvironmentMessage();
+    sp.setup({
+      spfxContext: this.context,
+    });
 
     return super.onInit();
   }
@@ -35,7 +46,10 @@ export default class HomePageWebPart extends BaseClientSideWebPart<IHomePageWebP
         isDarkTheme: this._isDarkTheme,
         environmentMessage: this._environmentMessage,
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
-        userDisplayName: this.context.pageContext.user.displayName
+        userDisplayName: this.context.pageContext.user.displayName,
+        Title: this.properties.Title ? this.properties.Title : "Westways Insurance Hub",
+        HomeBannerFilePicker: this.properties.HomeBannerFilePicker,
+        siteUrl: this.context.pageContext.web.absoluteUrl,
       }
     );
 
@@ -77,16 +91,31 @@ export default class HomePageWebPart extends BaseClientSideWebPart<IHomePageWebP
     return {
       pages: [
         {
-          header: {
-            description: strings.PropertyPaneDescription
-          },
           groups: [
             {
-              groupName: strings.BasicGroupName,
+              groupName: "Banner Details",
               groupFields: [
-                PropertyPaneTextField('description', {
-                  label: strings.DescriptionFieldLabel
-                })
+                PropertyPaneTextField('Title', {
+                  label: "Banner Title"
+                }),
+                PropertyFieldFilePicker("HomeBannerFilePicker", {
+                  context: this.context,
+                  onPropertyChange: this.onPropertyPaneFieldChanged.bind(this),
+                  properties: this.properties,
+                  onSave: (e: IFilePickerResult) => {
+                    console.log(e);
+                    this.properties.HomeBannerFilePicker = e;
+                  },
+                  onChanged: (e: IFilePickerResult) => {
+                    console.log(e);
+                    this.properties.HomeBannerFilePicker = e;
+                  },
+                  buttonLabel: "Image",
+                  label: "Banner Image",
+                  key: "FilePickerID",
+                  filePickerResult: this.properties.HomeBannerFilePicker,
+                  hideLocalUploadTab: true,
+                }),
               ]
             }
           ]
