@@ -1,11 +1,9 @@
-export interface IHomePageProps {
+export interface IEmployeeDirectoryProps {
   description: string;
   isDarkTheme: boolean;
   environmentMessage: string;
   hasTeamsContext: boolean;
   userDisplayName: string;
-  Title: string;
-  HomeBannerFilePicker: any;
+  spfxContext: any;
   siteUrl: any;
-  serverrelativeUrl: any;
 }

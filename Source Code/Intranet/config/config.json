@@ -9,12 +9,21 @@
           "manifest": "./src/webparts/homePage/HomePageWebPart.manifest.json"
         }
       ]
+    },
+    "employee-directory-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/employeeDirectory/EmployeeDirectoryWebPart.js",
+          "manifest": "./src/webparts/employeeDirectory/EmployeeDirectoryWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
   "localizedResources": {
     "HomePageWebPartStrings": "lib/webparts/homePage/loc/{locale}.js",
     "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js",
-    "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js"
+    "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js",
+    "EmployeeDirectoryWebPartStrings": "lib/webparts/employeeDirectory/loc/{locale}.js"
   }
 }

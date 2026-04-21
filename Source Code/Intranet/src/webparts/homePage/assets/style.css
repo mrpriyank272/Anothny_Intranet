@@ -77,6 +77,8 @@
   text-align: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   transition: 0.3s;
+  text-decoration: none;
+  color: black;
 }
 
 .quicklinks .card:hover {
@@ -236,6 +238,8 @@
 
 .celebration img {
   border-radius: 50%;
+  height: 40px;
+  width: 40px;
 }
 
 .celebration span {
@@ -259,4 +263,29 @@ h3 {
   font-size: 20px;
   margin: 0 0 15px 0;
   color: #8b1e2d;
+}
+
+.accordion {
+  border: none;
+}
+.accordion__button:before {
+  float: right;
+  border-color: #8b1e2d;
+}
+.accordion__panel {
+  padding: 10px;
+}
+.accordion__button,
+.accordion__button:hover {
+  background-color: #0a2d6c0f;
+  color: #8b1e2d;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  font-weight: 500;
+  width: -webkit-fill-available;
+  border-radius: 5px;
+  margin-bottom: 15px;
 }

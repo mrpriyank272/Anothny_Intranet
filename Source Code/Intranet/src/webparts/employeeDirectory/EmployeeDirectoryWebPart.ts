@@ -8,23 +8,17 @@ import {
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
 
-import * as strings from 'HomePageWebPartStrings';
-import HomePage from './components/HomePage';
-import { IHomePageProps } from './components/IHomePageProps';
-import {
-  PropertyFieldFilePicker,
-  IPropertyFieldFilePickerProps,
-  IFilePickerResult,
-} from "@pnp/spfx-property-controls/lib/PropertyFieldFilePicker";
-import { sp } from "@pnp/sp/presets/all";
+import * as strings from 'EmployeeDirectoryWebPartStrings';
+import EmployeeDirectory from './components/EmployeeDirectory';
+import { IEmployeeDirectoryProps } from './components/IEmployeeDirectoryProps';
+import { sp } from '@pnp/sp';
+import { graph } from '@pnp/graph';
 
-export interface IHomePageWebPartProps {
+export interface IEmployeeDirectoryWebPartProps {
   description: string;
-  Title: string;
-  HomeBannerFilePicker: IFilePickerResult;
 }
 
-export default class HomePageWebPart extends BaseClientSideWebPart<IHomePageWebPartProps> {
+export default class EmployeeDirectoryWebPart extends BaseClientSideWebPart<IEmployeeDirectoryWebPartProps> {
 
   private _isDarkTheme: boolean = false;
   private _environmentMessage: string = '';
@@ -32,25 +26,26 @@ export default class HomePageWebPart extends BaseClientSideWebPart<IHomePageWebP
   protected onInit(): Promise<void> {
     this._environmentMessage = this._getEnvironmentMessage();
     sp.setup({
-      spfxContext: this.context,
+      spfxContext: this.context
+    });
+    graph.setup({
+      spfxContext: this.context
     });
 
     return super.onInit();
   }
 
   public render(): void {
-    const element: React.ReactElement<IHomePageProps> = React.createElement(
-      HomePage,
+    const element: React.ReactElement<IEmployeeDirectoryProps> = React.createElement(
+      EmployeeDirectory,
       {
         description: this.properties.description,
         isDarkTheme: this._isDarkTheme,
         environmentMessage: this._environmentMessage,
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
         userDisplayName: this.context.pageContext.user.displayName,
-        Title: this.properties.Title ? this.properties.Title : "Westways Insurance Hub",
-        HomeBannerFilePicker: this.properties.HomeBannerFilePicker,
+        spfxContext: this.context,
         siteUrl: this.context.pageContext.web.absoluteUrl,
-        serverrelativeUrl: this.context.pageContext.web.serverRelativeUrl,
       }
     );
 
@@ -92,31 +87,16 @@ export default class HomePageWebPart extends BaseClientSideWebPart<IHomePageWebP
     return {
       pages: [
         {
+          header: {
+            description: strings.PropertyPaneDescription
+          },
           groups: [
             {
-              groupName: "Banner Details",
+              groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('Title', {
-                  label: "Banner Title"
-                }),
-                PropertyFieldFilePicker("HomeBannerFilePicker", {
-                  context: this.context,
-                  onPropertyChange: this.onPropertyPaneFieldChanged.bind(this),
-                  properties: this.properties,
-                  onSave: (e: IFilePickerResult) => {
-                    console.log(e);
-                    this.properties.HomeBannerFilePicker = e;
-                  },
-                  onChanged: (e: IFilePickerResult) => {
-                    console.log(e);
-                    this.properties.HomeBannerFilePicker = e;
-                  },
-                  buttonLabel: "Image",
-                  label: "Banner Image",
-                  key: "FilePickerID",
-                  filePickerResult: this.properties.HomeBannerFilePicker,
-                  hideLocalUploadTab: true,
-                }),
+                PropertyPaneTextField('description', {
+                  label: strings.DescriptionFieldLabel
+                })
               ]
             }
           ]
